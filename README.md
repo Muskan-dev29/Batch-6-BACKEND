@@ -69,8 +69,7 @@ http://192.168.1.20:5000/api
 ```json
 {
   "identifier": "john@example.com",
-  "password": "123456",
-  "role": "user"
+  "password": "123456"
 }
 ```
 

@@ -52,7 +52,7 @@ const signupUser = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { identifier, password, role } = req.body;
+    const { identifier, password } = req.body;
 
     const user = await User.findOne({
       $or: [{ email: identifier.toLowerCase() }, { username: identifier }]
@@ -65,10 +65,6 @@ const login = async (req, res, next) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ success: false, message: "Invalid credentials" });
-    }
-
-    if (role && user.role !== role) {
-      return res.status(403).json({ success: false, message: `Login denied for role: ${role}` });
     }
 
     const token = generateToken(user._id, user.role);

@@ -28,8 +28,7 @@ router.post(
   "/login",
   [
     body("identifier").notEmpty().withMessage("Email or username is required"),
-    body("password").notEmpty().withMessage("Password is required"),
-    body("role").optional().isIn(["admin", "user"]).withMessage("Role must be admin or user")
+    body("password").notEmpty().withMessage("Password is required")
   ],
   validateRequest,
   login
