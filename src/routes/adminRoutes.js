@@ -5,6 +5,7 @@ const { authorizeRoles } = require("../middlewares/roleMiddleware");
 
 const router = express.Router();
 
+// Admin Dashboard
 router.get("/dashboard", protect, authorizeRoles("admin"), getAdminDashboard);
 
 module.exports = router;
