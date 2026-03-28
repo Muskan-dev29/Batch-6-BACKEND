@@ -5,11 +5,16 @@ const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader) {
       return res.status(401).json({ success: false, message: "Unauthorized: token missing" });
     }
 
-    const token = authHeader.split(" ")[1];
+    const [scheme, rawToken] = authHeader.trim().split(/\s+/);
+    if (!scheme || scheme.toLowerCase() !== "bearer" || !rawToken) {
+      return res.status(401).json({ success: false, message: "Unauthorized: token missing" });
+    }
+
+    const token = rawToken.trim();
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findById(decoded.id).select("-password");

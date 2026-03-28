@@ -18,7 +18,14 @@ router.post(
     body("email").optional().isEmail().withMessage("Valid email is required"),
     body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
     body("confirmPassword").notEmpty().withMessage("Confirm Password is required"),
-    body("type").optional().isIn(["admin", "user"]).withMessage("Type must be admin or user")
+    body("type")
+      .optional()
+      .custom((value) => ["admin", "user"].includes(String(value).toLowerCase()))
+      .withMessage("Type must be admin or user"),
+    body("role")
+      .optional()
+      .custom((value) => ["admin", "user"].includes(String(value).toLowerCase()))
+      .withMessage("Role must be admin or user")
   ],
   validateRequest,
   signupUser

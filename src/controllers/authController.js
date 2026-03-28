@@ -4,10 +4,14 @@ const { generateToken } = require("../utils/token");
 
 const signupUser = async (req, res, next) => {
   try {
-    const { fullName, name, email, username, password, confirmPassword, type } = req.body;
+    const { fullName, name, email, username, password, confirmPassword, type, role } = req.body;
     const resolvedName = fullName || name;
 
-    const role = type || "user";
+    const resolvedRole = String(type || role || "user").toLowerCase();
+
+    if (!["admin", "user"].includes(resolvedRole)) {
+      return res.status(400).json({ success: false, message: "Type/role must be admin or user" });
+    }
 
     if (password !== confirmPassword) {
       return res.status(400).json({ success: false, message: "Password and Confirm Password must match" });
@@ -31,7 +35,7 @@ const signupUser = async (req, res, next) => {
       email: email ? email.toLowerCase() : undefined,
       username,
       password: hashedPassword,
-      role
+      role: resolvedRole
     });
 
     return res.status(201).json({
@@ -81,7 +85,7 @@ const login = async (req, res, next) => {
           username: user.username,
           role: user.role
         },
-        redirectTo: user.role === "admin" ? "/admin/dashboard" : "/home"
+        redirectTo: String(user.role).toLowerCase() === "admin" ? "/admin/dashboard" : "/home"
       }
     });
   } catch (error) {
