@@ -46,6 +46,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/favorites", favoriteRoutes);
+app.use("/api/wishlist", favoriteRoutes);
 app.use("/api/cart", cartRoutes);
 
 app.use(notFoundHandler);
